@@ -17,5 +17,5 @@ This is the code of a conversation-based adaptive relational translation framewo
 
 ## Reference
 EAR System -- https://ear-conv-rec.github.io/manual.html#1-system-overview
-Lei, Wenqiang and He, Xiangnan and Miao, Yisong and Wu, Qingyun and Hong, Richang and Kan, Min-Yen and Chua, Tat-Seng: Estimation-Action-Reflection: Towards Deep Interaction Between Conversational and Recommender Systems, Proceedings of the 13th International Conference on Web Search and Data Mining
+Lei, Wenqiang and He, Xiangnan and Miao, Yisong and Wu, Qingyun and Hong, Richang and Kan, Min-Yen and Chua, Tat-Seng, Estimation-Action-Reflection: Towards Deep Interaction Between Conversational and Recommender Systems, Proceedings of the 13th International Conference on Web Search and Data Mining
 
