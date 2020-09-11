@@ -11,7 +11,7 @@ This is the code of a conversation-based adaptive relational translation framewo
 
   - pandas 0.25.1
   
-* ### Datasets: CAL, CHA and PHO
+* ### Datasets
 Three datasets which are generated from Foursquare in three cities, i.e., Calgary (CAL), Charlotte (CHA) and Phoenix (PHO).
 ```bash
 https://developer.foursquare.com/docs/build-with-foursquare/categories/
