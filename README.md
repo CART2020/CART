@@ -13,4 +13,4 @@ This is source code of CART
 
 
 ## Reference
-https://ear-conv-rec.github.io/manual.html#1-system-overview
+EAR System -- https://ear-conv-rec.github.io/manual.html#1-system-overview
