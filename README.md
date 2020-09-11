@@ -22,11 +22,14 @@ https://sites.google.com/site/yangdingqi/home/foursquare-dataset
 * ### Modules of CART
   - #### Recommender
       generate_data.py (input generation)
+      
       train.py (train translation model)
       
   - #### Conversation Manager
       pn.py (action generator)
+      
       agent.py (state tracker, online update)
+      
       env.py (user response)
       
       
