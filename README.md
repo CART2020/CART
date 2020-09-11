@@ -22,8 +22,8 @@ https://sites.google.com/site/yangdingqi/home/foursquare-dataset
 
 
 * ### Modules of CART
-1. #### The recommender
-2. #### The conversation 
+1. #### Recommender
+2. #### Conversation 
 
 ## Reference
 EAR System -- https://ear-conv-rec.github.io/manual.html#1-system-overview                
