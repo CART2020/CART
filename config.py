@@ -325,7 +325,7 @@ class _Config():
         device = torch.device('cuda')
         model = model_file.TransE(self.relation_count_list, self.entity_count_list, device, dim=self.vector_length,
                                 margin=self.margin, norm=self.norm, item_att_model = model_item, relation_att_model=model_relation)
-        model.load_state_dict(torch.load("C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/weight/new_transE.pt"))
+        model.load_state_dict(torch.load("../weight/new_transE.pt"))
         self.entities_emb_head = model.entities_emb_head
         self.entities_emb_tail = model.entities_emb_tail
         self.relations_emb_time = model.relations_emb_time

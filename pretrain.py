@@ -138,7 +138,7 @@ def main():
     print('Model on GPU')
     data_list = list()
 
-    dir = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/pretrain-numpy-data-{}'.format(A.mod)
+    dir = '../data/pretrain-numpy-data-{}'.format(A.mod)
 
     files = os.listdir(dir)
     file_paths = [dir + '/' + f for f in files]
@@ -170,7 +170,7 @@ def main():
 
     for epoch in range(10):
         random.shuffle(train_list)
-        model_name = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/PN-model-{}/pretrain-model.pt'.format(A.mod)
+        model_name = '../data/PN-model-{}/pretrain-model.pt'.format(A.mod)
         train(A.bs, train_list, valid_list, test_list, optimizer, PN, criterion, epoch, model_name)
 
 

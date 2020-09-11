@@ -116,15 +116,15 @@ def main():
     if A.eval == 1:
 
         if A.mod == 'ours':
-            fp = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/PN-model-ours/PN-model-ours.txt'
+            fp = '../data/PN-model-ours/PN-model-ours.txt'
         if A.initeval == 1:
 
             if A.mod == 'ours':
-                fp = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/PN-model-ours/pretrain-model.pt'
+                fp = '../data/PN-model-ours/pretrain-model.pt'
     else:
         # means training
         if A.mod == 'ours':
-            fp = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/PN-model-ours/pretrain-model.pt'
+            fp = '../data/PN-model-ours/pretrain-model.pt'
             
     INPUT_DIM = 0
 
@@ -230,7 +230,7 @@ def main():
 #                print (k)
                 big_feature_list.append(k)
 
-        write_fp = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/interaction-log/{}/v4-code-{}-s-{}-e-{}-lr-{}-gamma-{}-playby-{}-stra-{}-topK-{}-trick-{}-eval-{}-init-{}-mini-{}-always-{}-upcount-{}-upreg-{}-m-{}.txt'.format(
+        write_fp = '../data/interaction-log/{}/v4-code-{}-s-{}-e-{}-lr-{}-gamma-{}-playby-{}-stra-{}-topK-{}-trick-{}-eval-{}-init-{}-mini-{}-always-{}-upcount-{}-upreg-{}-m-{}.txt'.format(
             A.mod.lower(), A.code, A.startFrom, A.endAt, A.lr, A.gamma, A.playby, A.strategy, A.TopKTaxo, A.trick,
             A.eval, A.initeval,
             A.mini, A.alwaysupdate, A.upcount, A.upreg, A.mask)
@@ -343,7 +343,7 @@ def main():
             # We use AT (average turn of conversation) as our stopping criterion
             # in training mode, save RL model periodically
             # save model first
-            PATH = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/PN-model-{}/v4-code-{}-s-{}-e-{}-lr-{}-gamma-{}-playby-{}-stra-{}-topK-{}-trick-{}-eval-{}-init-{}-mini-{}-always-{}-upcount-{}-upreg-{}-m-{}-epi-{}.txt'.format(
+            PATH = '../data/PN-model-{}/v4-code-{}-s-{}-e-{}-lr-{}-gamma-{}-playby-{}-stra-{}-topK-{}-trick-{}-eval-{}-init-{}-mini-{}-always-{}-upcount-{}-upreg-{}-m-{}-epi-{}.txt'.format(
                 A.mod.lower(), A.code, A.startFrom, A.endAt, A.lr, A.gamma, A.playby, A.strategy, A.TopKTaxo, A.trick,
                 A.eval, A.initeval,
                 A.mini, A.alwaysupdate, A.upcount, A.upreg, A.mask, epi_count)
@@ -365,7 +365,7 @@ def main():
             for i in range(num_interval):
                 ave = np.mean(np.array(conversation_length_list[i * check_span: (i + 1) * check_span]))
                 print('start: {}, end: {}, average: {}'.format(i * check_span, (i + 1) * check_span, ave))
-                PATH = 'C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/PN-model-{}/v4-code-{}-s-{}-e-{}-lr-{}-gamma-{}-playby-{}-stra-{}-topK-{}-trick-{}-eval-{}-init-{}-mini-{}-always-{}-upcount-{}-upreg-{}-m-{}-epi-{}.txt'.format(
+                PATH = '../data/PN-model-{}/v4-code-{}-s-{}-e-{}-lr-{}-gamma-{}-playby-{}-stra-{}-topK-{}-trick-{}-eval-{}-init-{}-mini-{}-always-{}-upcount-{}-upreg-{}-m-{}-epi-{}.txt'.format(
                     A.mod.lower(), A.code, A.startFrom, A.endAt, A.lr, A.gamma, A.playby, A.strategy, A.TopKTaxo,
                     A.trick,
                     A.eval, A.initeval,
@@ -388,7 +388,7 @@ def main():
         # Write to pretrain numpy which is the pretrain data.
         if A.purpose == 'pretrain':
             if len(numpy_list) > 5000:
-                with open('C:/Users/kvn646/Desktop/MSAI-Project/upload/CAL/basic/data/pretrain-numpy-data-{}/segment-{}-start-{}-end-{}.pk'.format(
+                with open('../data/pretrain-numpy-data-{}/segment-{}-start-{}-end-{}.pk'.format(
                         A.mod, NUMPY_COUNT, A.startFrom, A.endAt), 'wb') as f:
                     pickle.dump(numpy_list, f)
                     print('Have written 5000 numpy arrays!')
