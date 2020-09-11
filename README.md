@@ -13,7 +13,7 @@ This is the code of a conversation-based adaptive relational translation framewo
   
 * ### Datasets: CAL, CHA and PHO
 ```bash
-https://developer.foursquare.com/docs/build-withfoursquare/categories/
+https://developer.foursquare.com/docs/build-with-foursquare/categories/
 ```
 ```
 https://sites.google.com/site/yangdingqi/home/foursquare-dataset
