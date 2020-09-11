@@ -6,9 +6,7 @@ This is the code of a conversation-based adaptive relational translation framewo
 ## Pre-requisits
 * ### Running environment
   - Python 3.7.4
-
   - Pytorch 1.4.0
-
   - pandas 0.25.1
   
 * ### Datasets
@@ -22,9 +20,16 @@ https://sites.google.com/site/yangdingqi/home/foursquare-dataset
 
 
 * ### Modules of CART
-- #### Recommender
-
-- #### Conversation 
+  - #### Recommender
+      generate_data.py (input generation)
+      train.py (train translation model)
+      
+  - #### Conversation Manager
+      pn.py (action generator)
+      agent.py (state tracker, online update)
+      env.py (user response)
+      
+      
 
 ## Reference
 EAR System -- https://ear-conv-rec.github.io/manual.html#1-system-overview                
