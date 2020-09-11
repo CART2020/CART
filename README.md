@@ -5,7 +5,7 @@ This is the code of a conversation-based adaptive relational translation framewo
 
 ## Pre-requisits
 * ### Running environment
-  - Python 3
+  - Python 3.7.4
 
   - Pytorch 1.4.0
 
