@@ -16,7 +16,7 @@ This is the code of a conversation-based adaptive relational translation framewo
 https://developer.foursquare.com/docs/build-withfoursquare/categories/
 ```
 ```
-
+https://sites.google.com/site/yangdingqi/home/foursquare-dataset
 ```
 
 
