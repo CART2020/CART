@@ -32,7 +32,8 @@ https://sites.google.com/site/yangdingqi/home/foursquare-dataset
       
       env.py (user response)
       
-      
+## How to run
+You can run Train_TransE.py directly. Change Parsers for any change in need. 
 
 ## Reference
 EAR System -- https://ear-conv-rec.github.io/manual.html#1-system-overview                
