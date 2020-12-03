@@ -36,7 +36,7 @@ https://sites.google.com/site/yangdingqi/home/foursquare-dataset
 You can run Train_TransE.py directly. Change Parsers in need. 
 
 ## Printed Result 
-success rate is 0.0 at turn 1, accumulated sum is 0.0
+success rate is 0.0 at turn 1, accumulated sum is 0.0\\
 success rate is 0.10238095238095238 at turn 2, accumulated sum is 0.10238095238095238
 success rate is 0.49166666666666664 at turn 3, accumulated sum is 0.594047619047619
 success rate is 0.27976190476190477 at turn 4, accumulated sum is 0.8738095238095238
