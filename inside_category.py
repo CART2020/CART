@@ -4,7 +4,6 @@ def getvalues():
     
     df3 = pd.read_csv("inside_category.csv")
     inside_category_dict=dict()
-    #    max_int = 0
     for index,  row in df3.iterrows():
         if str(int(row['Item_id'])) not in inside_category_dict: 
             l2_dict = dict()

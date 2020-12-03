@@ -16,7 +16,6 @@ indexNames = df3[ df3['counts'] <= 1 ].index
 df3.drop(indexNames , inplace=True)
 df3.to_csv("new_transE.csv", index=False)
 
-#create time column
 df4 = pd.read_csv("new_transE.csv", encoding= 'unicode_escape')
 time_list = df4['Time'].to_list()
 new_time=[]
@@ -32,9 +31,7 @@ df4['new_time'] = new_time
 df4.to_csv("new_transE.csv", index=False)
 
 
-#reindex
 def get_column_values(column):
-    # get unique column items
     column_list = []
     for i in column:
         for j in i:
@@ -64,9 +61,7 @@ for column in columns_to_change:
     old_df.to_csv("new_transE_3.csv", index=False)
     
     
-#create item dict 
 def get_unique_column_values(column):
-    # get unique column items
     column_list = []
     for i in column:
         for j in i:
@@ -113,7 +108,6 @@ for index,  row in df3.iterrows():
         item_dict[str(int(row['Item_id']))]['stars'] = round((sum(star_list))/len(star_list),1)
         item_dict[str(int(row['Item_id']))]['L2_Category_name'].append(int(row['L2_Category_name']))
         item_dict[str(int(row['Item_id']))]['feature_index'].append(int(row['L2_Category_name']))
-#create L2
 L2_dict = dict()
 df = pd.read_csv('new_transE_3.csv', usecols=['L1_Category','L2_Category_name']) 
 for index, row in df.iterrows():
@@ -129,7 +123,6 @@ for index, row in df.iterrows():
 with open('L2.json', 'w') as json_file:
     json.dump(L2_dict, json_file)
 
-#create poi
 poi_dict = dict()
 star_list = dict()
 df = pd.read_csv('new_transE_3.csv', usecols=['Item_id','Location_id','POI_Type','POI','stars','L2_Category_name']) 

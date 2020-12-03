@@ -39,7 +39,6 @@ class agent():
         self.turn_count = 0
         self.F_dict = defaultdict(lambda: defaultdict())
         self.recent_candidate_list = [int(k) for k, v in cfg.item_dict.items()]
-#        print ("agent init candidate list: ", len(self.recent_candidate_list))
         self.recent_candidate_list_ranked = self.recent_candidate_list
 
         self.asked_feature = list() #record asked facets
@@ -77,20 +76,19 @@ class agent():
         self.previous_dict = None
         self.rejected_time = 0
         self.do_mask = do_mask
-        self.big_feature_length = 11 # 2+9 no starts
-        self.feature_length = 289 #L2 + star + cluster +type in CRM
+        self.big_feature_length = 11 
+        self.feature_length = 289 
         self.sample_dict = sample_dict
-        self.choose_pool = choose_pool #['clusters', 'POI_Type'] + big_feature_list 
+        self.choose_pool = choose_pool 
         
-        self.features = features # feature sequence
-        self.items = items # item sequence
+        self.features = features 
+        self.items = items 
         self.known_feature_category = []
         self.known_feature_cluster =[]
         self.known_feature_type =[]
         self.known_feature_total =[]
 
     def get_batch_data(self, pos_neg_pairs, bs, iter_):
-        # this function is used for Reflection Stage.
         PAD_IDX1 = len(cfg.user_list) + len(cfg.item_dict)
         PAD_IDX2 = cfg.feature_count
 
@@ -98,10 +96,8 @@ class agent():
         right = min((iter_ + 1) * bs, len(pos_neg_pairs))
         pos_list, pos_list2, neg_list, neg_list2 = list(), list(), list(), list()
         for instance in pos_neg_pairs[left: right]:
-            # instance[0]: pos item, instance[1] neg item
             pos_list.append(torch.LongTensor([self.user_id, instance[0] + len(cfg.user_list)]))
             neg_list.append(torch.LongTensor([self.user_id, instance[1] + len(cfg.user_list)]))
-        # end for
         preference_list = torch.LongTensor(self.known_feature).expand(len(pos_list), len(self.known_feature))
 
         pos_list = pad_sequence(pos_list, batch_first=True, padding_value=PAD_IDX1)
@@ -114,7 +110,6 @@ class agent():
     # end def
 
     def mini_update_transE(self):
-        # This function is used to update the pretrained transE model.
         device = torch.device('cuda')
         self.transE_model.to(device)
         self.transE_model.train()
@@ -123,15 +118,12 @@ class agent():
         
         items = self.items
         features = self.features
-#        asked_features = self.asked_feature
         item_features_list = features.strip().split(' ')
-    #    print (item_features_list)
-    #    print (item_features_list[-1])
+
         target_time, target_category, target_cluster, target_poi_type = item_features_list[-1].split(',') # target item features        
         
         userID = torch.LongTensor([self.user_id])
         userID = userID.to(device)
-#        print (target_time)
         target_time = torch.LongTensor([int(target_time)])
         target_time = target_time.to(device)
         
@@ -146,7 +138,6 @@ class agent():
         if len(self.known_feature_category) > 0:
             feature_list = self.known_feature_category
         
-    # check if value is None
         if asked_cluster != None:
             asked_cluster = torch.LongTensor([asked_cluster])
             asked_cluster = asked_cluster.to(device)
@@ -189,13 +180,10 @@ class agent():
             lsigmoid = nn.LogSigmoid()
             diff,_,_ = self.transE_model.forward(positive_item_triples,negative_item_triples)
             loss = - lsigmoid(diff).sum(dim=0)
-#            print(loss)
             loss.backward()    
             optimizer.step()
-    # end def
 
     def vectorize(self):
-        # This function is for the vectorization of our state vector.
 
         list4 = [v for k, v in self.distance_dict2.items()]
 
@@ -220,7 +208,7 @@ class agent():
             list6[7] = 1
 
 
-        list4 = [float(i)/sum(list4) for i in list4] #normalization
+        list4 = [float(i)/sum(list4) for i in list4] 
         list_cat = list4 + list5 + list6
         list_cat = np.array(list_cat)
 
@@ -234,51 +222,35 @@ class agent():
     def update_upon_feature_inform(self, input_message):
         assert input_message.message_type == cfg.INFORM_FACET
         
-        #_______ update F_dict________
-        facet = input_message.data['facet'] # asked facet in last turn
+        facet = input_message.data['facet'] 
         if facet is None:
             print('?')
         self.asked_feature.append(facet)
         value = input_message.data['value']
 
-#        if facet in ['stars', 'RestaurantsPriceRange2', 'city']:
         if facet in ['clusters', 'POI_Type']:
-            
-            '''
-            value is a list
-            for Prices: [3.0]
-            '''
+
             if value is not None and value[0] is not None: # value is in list.
-                # for k in recent_candidate_list, if cfg.item_dict[str(k)][facet] in value, keep k(candidates)
                 self.recent_candidate_list = [k for k in self.recent_candidate_list if cfg.item_dict[str(k)][facet] in value]
-#                print ("recent_candidate_list length ", self.recent_candidate_list)
-                # avoid busi_id(ground truth) ranking high in recent_candidate_list
-                '''check the type of busi_id, int and str work different'''
+
                 self.recent_candidate_list = list(set(self.recent_candidate_list) - set([self.busi_id])) + [self.busi_id]
-                # add facet to know_facet
                 self.known_facet.append(facet)
                 fresh = True
                 if facet == 'clusters':
                     if int(value[0]) not in self.known_feature_cluster:
-                        # append new value which responding to facet, to known_feature
-#                        self.known_feature.append(int(value[0]))# add region 1 to known feature
                         self.known_feature_cluster.append(int(value[0]))
                     else:
                         fresh = False
                 if facet == 'POI_Type':
                     if int(value[0]) not in self.known_feature_type:
-#                        self.known_feature.append(int(value[0] + cfg.clusters_count - 1))
                         self.known_feature_type.append(int(value[0]))
                     else:
                         fresh = False
 
                 self.known_feature = list(set(self.known_feature)) # feature = values
-#                print ('feature1 : ',self.known_feature[-1])
 
                 
-                # if we dont ask  
                 if cfg.play_by != 'AOO' and cfg.play_by != 'AOO_valid':
-                    # features = prefered values, known features similarity to preference features
                     self.known_feature_total.clear()
                     self.known_feature_total.append(self.known_feature_cluster)
                     self.known_feature_total.append(self.known_feature_type)
@@ -286,22 +258,17 @@ class agent():
                     
                     self.distance_dict = feature_distance(self.known_feature_total, self.user_id, self.TopKTaxo, self.features)
                     self.distance_dict2 = self.distance_dict.copy()
-                    #print('Similarity ranking dict: {}'.format(self.distance_dict))
 
                     self.recent_candidate_list_ranked = rank_items(self.known_feature_total, self.items, self.features, self.transE_model, self.recent_candidate_list, self.rejected_item_list_)
-        # end if
-        else:  # means the feature is in the small tags
+        else:  
             if value is not None:
                 self.recent_candidate_list = [k for k in self.recent_candidate_list if set(value).issubset(set(cfg.item_dict[str(k)]['L2_Category_name']))]
-#                print ("recent_candidate_list length ", self.recent_candidate_list[-1])
                 self.recent_candidate_list = list(set(self.recent_candidate_list) - set([self.busi_id])) + [self.busi_id]
 
                 self.known_feature_category += [int(i) for i in value]
-#                print ('feature2 : ',self.known_feature[-1])
                 self.known_feature_category = list(set(self.known_feature_category))
                 self.known_facet.append(facet)
 
-                # dictionary
                 l = list(set(self.recent_candidate_list) - set([self.busi_id]))
                 random.shuffle(l)
 
@@ -314,17 +281,14 @@ class agent():
                     self.distance_dict = feature_distance(self.known_feature_total, self.user_id, self.TopKTaxo, self.features)
                     self.distance_dict2 = self.distance_dict.copy()
                     self.recent_candidate_list_ranked = rank_items(self.known_feature_total, self.items, self.features, self.transE_model, self.recent_candidate_list, self.rejected_item_list_)
-        # end else
 
         start = time.time()
         if value is not None and value[0] is not None:
 
             c = cal_ent(self.recent_candidate_list)
-#            print (c)
             d = c.do_job()
             self.entropy_dict = d
 
-        # _______ set those asked feature's entropy to 0 _______
         for f in self.asked_feature:
             self.entropy_dict[f] = 0
 
@@ -363,13 +327,10 @@ class agent():
             self.asked_feature.append(facet)
             return new_message
         elif self.strategy == 'maxsim':
-            # ask following max similarity between attributes
-            for f in self.asked_feature: # asked factes
+            for f in self.asked_feature: 
                 if self.distance_dict is not None and f in self.distance_dict:
                     self.distance_dict[f] = 10000
-            # if we dont have any feature, we use entropy dict.
             if len(self.known_feature) == 0 or self.distance_dict is None:
-                # key is used to compare
                facet = max(self.entropy_dict, key=self.entropy_dict.get)
             else:
                facet = max(self.distance_dict, key=self.distance_dict.get)
@@ -390,24 +351,18 @@ class agent():
             return new_message
 
     def prepare_rec_message(self):
-        '''recent_candidate_list_ranked = ['3', '10']'''
         self.recent_candidate_list_ranked = [item for item in self.recent_candidate_list_ranked if item not in self.rejected_item_list_]  # Delete those has been rejected
         rec_list = self.recent_candidate_list_ranked[: 10]
         data = dict()
         data['rec_list'] = rec_list
-        print ('recommend_list: ', rec_list)
         new_message = message(cfg.AGENT, cfg.USER, cfg.MAKE_REC, data)
         return new_message
 
     def response(self, input_message):
-        '''
-        The agent moves a step forward, upon receiving a message from the user.
-        '''
+
         assert input_message.sender == cfg.USER
         assert input_message.receiver == cfg.AGENT
-        #_______ update the agent self_______
         if input_message.message_type == cfg.INFORM_FACET:
-            #update entropy and similarity
             self.update_upon_feature_inform(input_message)
         if input_message.message_type == cfg.REJECT_REC:
             self.rejected_item_list_ += input_message.data['rejected_item_list']
@@ -421,20 +376,18 @@ class agent():
                     self.recent_candidate_list = list(set(self.recent_candidate_list) - set([self.busi_id])) + [self.busi_id]
                     self.recent_candidate_list_ranked = rank_items(self.known_feature_total, self.items, self.features, self.transE_model, self.recent_candidate_list, self.rejected_item_list_)
 
-        #_______ Adding into history _______
         if input_message.message_type == cfg.INFORM_FACET:
-            if self.turn_count > 0:  # means first doesn't# count
+            if self.turn_count > 0:  
                 if input_message.data['value'] is None:
-                    self.history_list.append(0)  # ask attribute, fail
+                    self.history_list.append(0)  
                 else:
-                    self.history_list.append(1)  # ask attribute, successful
+                    self.history_list.append(1)  
 
         if input_message.message_type == cfg.REJECT_REC:
-            self.history_list.append(-1)  # try recommendation, user doesn't want.
-            self.recent_candidate_list = list(set(self.recent_candidate_list) - set(self.rejected_item_list_)) # don't consider
+            self.history_list.append(-1)  
+            self.recent_candidate_list = list(set(self.recent_candidate_list) - set(self.rejected_item_list_)) 
 
         if cfg.play_by != 'AOO' and cfg.play_by != 'AOO_valid':
-            # Add control point here
             if cfg.mod == 'ours':
                 state_vector = self.vectorize()
 
@@ -443,22 +396,18 @@ class agent():
 
 
         if cfg.play_by == 'policy':
-            # means using Policy Network to determine action
             s = torch.from_numpy(state_vector).float()
             s = Variable(s, requires_grad=True)
             self.PN_model.eval()
             pred = self.PN_model(s)
             prob = SoftMax(pred)
             c = Categorical(prob)
-#            print ("pred is: ", pred)
-            # different way to choose action
-            if cfg.eval == 1: # action selection based on max softmax value 
-                # for evaluation of Action stage
+
+            if cfg.eval == 1: 
                 pred_data = pred.data.tolist()
                 sorted_index = sorted(range(len(pred_data)), key=lambda k: pred_data[k], reverse=True)
 
-                # The following line are for avoid asking same question
-                # It is a fair evaluation, because all models have such operation.
+
                 unasked_max = None
                 for item in sorted_index:
                     if item < self.big_feature_length:
@@ -468,15 +417,13 @@ class agent():
                     else:
                         unasked_max = self.big_feature_length
                         break
-                action = Variable(torch.IntTensor([unasked_max]))  # make it compatible with torch
+                action = Variable(torch.IntTensor([unasked_max]))  
                 print('action is: {}'.format(action))
             else: # for RL
-                # for training of Action stage
                 i = 0
                 action_ = self.big_feature_length
                 while(i < 10000):
                    action_ = c.sample()
-#                   print ('action_ is: ', action_)
                    i += 1
                    if action_ <= self.big_feature_length:
                        if action_ == self.big_feature_length:
@@ -485,7 +432,6 @@ class agent():
                            break
                 action = action_
                 print('action is: {}'.format(action))
-#                print('facet is: {}'.format(cfg.FACET_POOL[action_]))
 
             log_prob = c.log_prob(action)
             if self.turn_count != 0:
@@ -493,19 +439,16 @@ class agent():
             else:
                 self.log_prob_list = log_prob.reshape(1)
 
-            # translate into message
             if action < len(cfg.FACET_POOL):
                 data = dict()
                 data['facet'] = cfg.FACET_POOL[action]
                 new_message = message(cfg.AGENT, cfg.USER, cfg.ASK_FACET, data)
             else:
                 new_message = self.prepare_rec_message()
-#                print ('*********** prepare_rec_message')
             self.action_tracker.append(action.data.numpy().tolist())
             self.candidate_length_tracker.append(len(self.recent_candidate_list))
 
 
-        # following are for writing to numpy array
         action = None
         if new_message.message_type == cfg.ASK_FACET:
             action = cfg.FACET_POOL.index(new_message.data['facet'])
@@ -515,10 +458,7 @@ class agent():
 
         if cfg.purpose == 'pretrain':
             self.numpy_list.append((action, state_vector))
-        # end following
 
         with open(self.write_fp, 'a') as f:
             f.write('Turn count: {}, candidate length: {}\n'.format(self.turn_count, len(self.recent_candidate_list)))
         return new_message
-    # end def response
-# end def class agent

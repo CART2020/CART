@@ -13,7 +13,6 @@ def cuda_(var):
     return var.cuda() if torch.cuda.is_available() else var
 
 def get_unique_column_values(column):
-    # get unique column items
     column_list = []
     for i in column:
         for j in i:
@@ -35,12 +34,12 @@ class _Config():
     def init_data(self):
         train_dict,valid_dict,test_dict = generate_data.get_data()
         sequence_list =[]
-        f1 = open("train_list_item.txt", "w") #user_id i1 i2 i3
-        f2 = open("train_list_features.txt", "w") #3,3,3,4    2,2,2,2    9,9,9,9
-        f7 = open("train_list_location.txt", "w") #Item's location_id
+        f1 = open("train_list_item.txt", "w") 
+        f2 = open("train_list_features.txt", "w") 
+        f7 = open("train_list_location.txt", "w") 
         for key in train_dict.keys():
-            num_total_sequences = len(train_dict[key][0]) #eg. user '0' sequence number
-            for i in range(num_total_sequences): #check each sequence
+            num_total_sequences = len(train_dict[key][0]) 
+            for i in range(num_total_sequences): 
                 sequence_length = len(train_dict[key][0][i])
                 sequence_list.append(sequence_length)
                 f1_row = str(key) + ' '
@@ -65,13 +64,13 @@ class _Config():
         
 
         sequence_list =[]
-        f3 = open("valid_list_item.txt", "w") #user_id i1 i2 i3
-        f4 = open("valid_list_features.txt", "w") #3,3,3,4    2,2,2,2    9,9,9,9
-        f8 = open("valid_list_location.txt", "w") #Item's location_id
+        f3 = open("valid_list_item.txt", "w") 
+        f4 = open("valid_list_features.txt", "w")
+        f8 = open("valid_list_location.txt", "w") 
 
         for key in valid_dict.keys():
-            num_total_sequences = len(valid_dict[key][0]) #eg. user '0' sequence number
-            for i in range(num_total_sequences): #check each sequence
+            num_total_sequences = len(valid_dict[key][0]) 
+            for i in range(num_total_sequences): 
                 sequence_length = len(valid_dict[key][0][i])
                 sequence_list.append(sequence_length)
                 f3_row = str(key) + ' '
@@ -96,12 +95,12 @@ class _Config():
         
 
         sequence_list =[]
-        f5 = open("test_list_item.txt", "w") #user_id i1 i2 i3
-        f6 = open("test_list_features.txt", "w") #3,3,3,4    2,2,2,2    9,9,9,9
-        f9 = open("test_list_location.txt", "w") #Item's location_id
+        f5 = open("test_list_item.txt", "w") 
+        f6 = open("test_list_features.txt", "w") 
+        f9 = open("test_list_location.txt", "w")
         for key in test_dict.keys():
-            num_total_sequences = len(test_dict[key][0]) #eg. user '0' sequence number
-            for i in range(num_total_sequences): #check each sequence
+            num_total_sequences = len(test_dict[key][0])
+            for i in range(num_total_sequences):
                 sequence_length = len(test_dict[key][0][i])
                 sequence_list.append(sequence_length)
                 f5_row = str(key) + ' '
@@ -223,8 +222,7 @@ class _Config():
         self.norm = 1
         self.learning_rate = 0.01
         
-#        df2 = pd.read_csv("ui.csv") #UNIQUE ui
-        df3 = pd.read_csv("dict.csv") #Item_id	stars	clusters	new_L2_Category_name	new_POI_Type from ear.csv
+        df3 = pd.read_csv("dict.csv") 
         user_list = df[['User_id']].values.tolist()
         self.user_list = get_unique_column_values(user_list)
 
@@ -233,17 +231,15 @@ class _Config():
         self.busi_list = get_unique_column_values(busi_list)
         
         
-        # _______ String to Int _______
 
-        with open('L2.json', 'r') as f: # "Food": [6, 7, 9, 14, 15, 17, 19, 20, 2]
+        with open('L2.json', 'r') as f: 
             self.taxo_dict = json.load(f)
         with open('poi.json', 'r') as f:
             self.poi_dict = json.load(f)
         
-        df3 = pd.read_csv("dict.csv") #Item_id	stars	clusters	new_L2_Category_name	new_POI_Type from ear.csv
+        df3 = pd.read_csv("dict.csv") 
         item_dict=dict()
         star_list =[]
-    #    max_int = 0
         for index,  row in df3.iterrows():
             if str(int(row['Item_id'])) not in item_dict: 
                 star_list.clear()
@@ -271,20 +267,16 @@ class _Config():
         self.ACCEPT_REC = 'ACCEPT_REC'
         self.REJECT_REC = 'REJECT_REC'
 
-        # define agent behavior
         self.ASK_FACET = 'ASK_FACET'
         self.MAKE_REC = 'MAKE_REC'
         self.FINISH_REC_ACP = 'FINISH_REC_ACP'
         self.FINISH_REC_REJ = 'FINISH_REC_REJ'
         self.EPISODE_START = 'EPISODE_START'
 
-        # define the sender type
         self.USER = 'USER'
         self.AGENT = 'AGENT'
 
     def init_misc(self):
-#        self.FACET_POOL = ['city', 'stars', 'RestaurantsPriceRange2']
-#        self.FACET_POOL = ['clusters', 'stars', 'POI_Type']
         self.FACET_POOL = ['clusters',  'POI_Type']
         self.FACET_POOL += self.taxo_dict.keys()
         print('Total feature length is: {}, Top 10 namely: {}'.format(len(self.FACET_POOL), self.FACET_POOL[: 10]))

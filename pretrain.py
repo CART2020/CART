@@ -67,8 +67,7 @@ def validate(purpose, train_list, valid_list, test_list, model):
 
         y_pred += pred_result.cpu().numpy().tolist()
 
-    print('Validating purpose {} takes {} seconds, cumulative loss is: {}, accuracy: {}%'.format(purpose, time.time() - start, epoch_loss / max_iter, correct * 100.0 / (max_iter * bs)))
-    print(classification_report(y_true, y_pred))
+
     model.train()
 
 
@@ -80,7 +79,6 @@ def train(bs, train_list, valid_list, test_list, optimizer, model, criterion, ep
     if epoch == 9:
         PATH = model_path
         torch.save(model.state_dict(), PATH)
-        print('Model saved at {}'.format(PATH))
         return
 
     model.train()

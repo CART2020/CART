@@ -68,11 +68,7 @@ def get_reward(history_list, gamma, trick):
 
     # turn rewards to pytorch tensor and standardize
     rewards = torch.Tensor(rewards)
-    print('history list: {}'.format(history_list))
-    print('reward: {}'.format(rewards))
 
-    # It is a trick for optimization of policy gradient, we can consider use it or not
-    # We didn't use it. But the follower of our work can consider use it.
     if trick == 1:
         rewards = (rewards - rewards.mean()) / (rewards.std() + np.finfo(np.float32).eps)
 
@@ -82,7 +78,6 @@ def get_reward(history_list, gamma, trick):
 ''' recommend procedure '''
 def run_one_episode(transE_model, user_id, busi_id, MAX_TURN, do_random, write_fp, strategy, TopKTaxo,
                     PN_model, gamma, trick, mini, optimizer1_transE, optimizer2_transE, alwaysupdate, start_facet, mask, sample_dict, choose_pool,features, items):
-    # _______ initialize user and agent _______
     
     success = None
     
@@ -94,7 +89,6 @@ def run_one_episode(transE_model, user_id, busi_id, MAX_TURN, do_random, write_f
 
     the_agent = agent.agent(transE_model, user_id, busi_id, do_random, write_fp, strategy, TopKTaxo, numpy_list, PN_model, log_prob_list, action_tracker, candidate_length_tracker, mini, optimizer1_transE, optimizer2_transE, alwaysupdate, mask, sample_dict, choose_pool, features, items)
 
-    # _______ initialize start message _______
     data = dict()
     data['facet'] = start_facet
     start_signal = message(cfg.AGENT, cfg.USER, cfg.EPISODE_START, data)

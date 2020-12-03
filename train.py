@@ -19,7 +19,7 @@ import inside_category
 
 train_dict,valid_dict,test_dict = generate_data.get_data()
 
-df = pd.read_csv("new_transE_3.csv") # train_data.csv
+df = pd.read_csv("../data/new_transE_3.csv") 
 user_length = df['User_id'].max()+1
 item_length = df['Item_id'].max()+1
 
@@ -38,12 +38,6 @@ entity_count_list = []
 entity_count_list.append(user_length)
 entity_count_list.append(item_length)
 
-HITS_AT_1_SCORE = float
-HITS_AT_3_SCORE = float
-HITS_AT_10_SCORE = float
-MRR_SCORE = float
-METRICS = Tuple[HITS_AT_1_SCORE, HITS_AT_3_SCORE, HITS_AT_10_SCORE, MRR_SCORE]
-
 
 vector_length = 50
 margin = 1.0
@@ -51,17 +45,15 @@ device = torch.device('cuda')
 norm = 2
 learning_rate = 0.001
 model_item = model_definition.Attention_item_level(input_dim= 2 * vector_length, dim1=64, output_dim=1)
-model_relation = model_definition.Attention_item_level(input_dim= 2 * vector_length, dim1=64, output_dim=1)
+model_relation = model_definition.Attention_relation_level(input_dim= 2 * vector_length, dim1=64, output_dim=1)
 
 
 model = model_definition.TransE( relation_count_list, entity_count_list, device=device, dim=vector_length,
-                                margin=margin, norm=norm, item_att_model = model_item, relation_att_model=model_relation)  # type: torch.nn.Module
+                                margin=margin, norm=norm, item_att_model = model_item, relation_att_model=model_relation)
 model = model.to(device)
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-#start_epoch_id, step, best_score = storage.load_checkpoint('checkpoint.tar', model, optimizer)
 best_score = 0.0
 step = 0
-#column_index = 0
 sequence_list = []
 
 f = open("new_train.txt", "w")
@@ -81,8 +73,7 @@ f.close()
 train_set = ds.Dataset('new_train.txt',None)
 
 path = "../weight/new_transE.pt"
-#model.load_state_dict(torch.load(path))
-#print (len(train_set))
+
 sequence_index = 0
 current_sequence = 0
 embedding_list = []
@@ -95,7 +86,7 @@ model.train()
 
 for epoch in range(20):
     print ('epoch: ', epoch)
-    for i in range(len(train_set)): # or i, image in enumerate(dataset)
+    for i in range(len(train_set)): 
         if (sequence_index == sequence_list[current_sequence]-1):
             local_heads, local_relation_time,local_relation_category, local_relation_cluster, local_relation_type, local_tails = train_set[i]
             local_heads = torch.LongTensor([local_heads])
