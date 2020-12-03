@@ -36,17 +36,17 @@ https://sites.google.com/site/yangdingqi/home/foursquare-dataset
 You can run Train_TransE.py directly. Change Parsers in need. 
 
 ## Printed Result 
-success rate is 0.0 at turn 1, accumulated sum is 0.0\\
-success rate is 0.10238095238095238 at turn 2, accumulated sum is 0.10238095238095238
-success rate is 0.49166666666666664 at turn 3, accumulated sum is 0.594047619047619
-success rate is 0.27976190476190477 at turn 4, accumulated sum is 0.8738095238095238
-success rate is 0.09761904761904762 at turn 5, accumulated sum is 0.9714285714285714
-success rate is 0.002380952380952381 at turn 6, accumulated sum is 0.9738095238095238
-success rate is 0.0011904761904761906 at turn 7, accumulated sum is 0.975
-success rate is 0.0 at turn 8, accumulated sum is 0.975
-success rate is 0.0 at turn 9, accumulated sum is 0.975
-success rate is 0.0 at turn 10, accumulated sum is 0.975
-Average turn is:  3.5845238095238097
+success rate is 0.0 at turn 1, accumulated sum is 0.0   
+success rate is 0.10238095238095238 at turn 2, accumulated sum is 0.10238095238095238 
+success rate is 0.49166666666666664 at turn 3, accumulated sum is 0.594047619047619 
+success rate is 0.27976190476190477 at turn 4, accumulated sum is 0.8738095238095238  
+success rate is 0.09761904761904762 at turn 5, accumulated sum is 0.9714285714285714  
+success rate is 0.002380952380952381 at turn 6, accumulated sum is 0.9738095238095238 
+success rate is 0.0011904761904761906 at turn 7, accumulated sum is 0.975 
+success rate is 0.0 at turn 8, accumulated sum is 0.975 
+success rate is 0.0 at turn 9, accumulated sum is 0.975 
+success rate is 0.0 at turn 10, accumulated sum is 0.975  
+Average turn is:  3.5845238095238097  
 
 ## Reference
 EAR System -- https://ear-conv-rec.github.io/manual.html#1-system-overview                
